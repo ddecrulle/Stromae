@@ -1,6 +1,6 @@
 {
   "name": "stromae",
-  "version": "2.1.59",
+  "version": "2.1.60",
   "description": "Web application for the management of questionnaires powered by Lunatic",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
   "dependencies": {
     "@axa-fr/react-oidc-context": "^4.0.0",
     "@craco/craco": "^6.4.0",
-    "@inseefr/lunatic": "^0.3.5-experimental",
+    "@inseefr/lunatic": "0.3.6-experimental",
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
@@ -35,9 +35,10 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
+    "copy": "copyfiles -f ./node_modules/@axa-fr/react-oidc-context/dist/OidcServiceWorker.js ./public && copyfiles -f -s ./node_modules/@axa-fr/react-oidc-context/dist/OidcTrustedDomains.js ./public",
     "start": "react-scripts start",
     "start-dev": "craco start",
-    "build": "react-scripts build && copy-and-watch configuration/* build",
+    "build": "yarn copy && react-scripts build && copy-and-watch configuration/* build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
