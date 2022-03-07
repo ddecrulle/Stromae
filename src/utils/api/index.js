@@ -1,40 +1,39 @@
 import { fetcher, fetcherFile } from './fetcher';
 
-const getRequest = url => token => fetcher(url, token, 'GET', null);
-const putRequest = url => token => body => fetcher(url, token, 'PUT', body);
-const postRequest = url => token => body => fetcher(url, token, 'POST', body);
+const getRequest = url => fetcher(url, 'GET', null);
+const putRequest = url => body => fetcher(url, 'PUT', body);
+const postRequest = url => body => fetcher(url, 'POST', body);
 
 /* SurveyUnit's data */
-const getSuData = apiUrl => id => token =>
-  getRequest(`${apiUrl}/api/survey-unit/${id}`)(token);
-const putSuData = apiUrl => id => token => body =>
-  putRequest(`${apiUrl}/api/survey-unit/${id}`)(token)(body);
+const getSuData = apiUrl => id => getRequest(`${apiUrl}/api/survey-unit/${id}`);
+const putSuData = apiUrl => id => body =>
+  putRequest(`${apiUrl}/api/survey-unit/${id}`)(body);
 
-const putData = apiUrl => id => token => body =>
-  putRequest(`${apiUrl}/api/survey-unit/${id}/data`)(token)(body);
+const putData = apiUrl => id => body =>
+  putRequest(`${apiUrl}/api/survey-unit/${id}/data`)(body);
 
-const putStateData = apiUrl => id => token => body =>
-  putRequest(`${apiUrl}/api/survey-unit/${id}/state-data`)(token)(body);
+const putStateData = apiUrl => id => body =>
+  putRequest(`${apiUrl}/api/survey-unit/${id}/state-data`)(body);
 
 /* Questionnaire's resource */
-const getQuestionnaire = apiUrl => id => token =>
-  getRequest(`${apiUrl}/api/questionnaire/${id}`)(token);
+const getQuestionnaire = apiUrl => id =>
+  getRequest(`${apiUrl}/api/questionnaire/${id}`);
 
-const getRequiredNomenclatures = apiUrl => id => token =>
-  getRequest(`${apiUrl}/api/questionnaire/${id}/required-nomenclatures`)(token);
+const getRequiredNomenclatures = apiUrl => id =>
+  getRequest(`${apiUrl}/api/questionnaire/${id}/required-nomenclatures`);
 
-const getNomenclature = apiUrl => id => token =>
-  getRequest(`${apiUrl}/api/nomenclature/${id}`)(token);
+const getNomenclature = apiUrl => id =>
+  getRequest(`${apiUrl}/api/nomenclature/${id}`);
 
-const getMetadata = apiUrl => id => token =>
-  getRequest(`${apiUrl}/api/questionnaire/${id}/metadata`)(token);
+const getMetadata = apiUrl => id =>
+  getRequest(`${apiUrl}/api/questionnaire/${id}/metadata`);
 
-const getDepositProof = apiUrl => id => token =>
-  fetcherFile(`${apiUrl}/api/survey-unit/${id}/deposit-proof`, token);
+const getDepositProof = apiUrl => id =>
+  fetcherFile(`${apiUrl}/api/survey-unit/${id}/deposit-proof`);
 
 /* Paradata */
-const postParadata = apiUrl => token => body =>
-  postRequest(`${apiUrl}/api/paradata`)(token)(body);
+const postParadata = apiUrl => body =>
+  postRequest(`${apiUrl}/api/paradata`)(body);
 
 export const API = {
   getRequest,

@@ -7,16 +7,14 @@ const readJsonResponse = async response => {
   }
 };
 
-export const fetcher = async (url, token, method, body) => {
+export const fetcher = async (url, method, body) => {
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
   try {
     const response = await fetch(url, {
-      headers: token
-        ? { ...headers, Authorization: `Bearer ${token}` }
-        : headers,
+      headers: headers,
       method,
       body: body ? JSON.stringify(body) : null,
     });
@@ -42,10 +40,9 @@ const getFilenameFromHeader = header => {
   return res && res.length > 0 ? res[1] : 'default.pdf';
 };
 
-export const fetcherFile = async (url, token) => {
+export const fetcherFile = async url => {
   try {
     const response = await fetch(url, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
       method: 'GET',
     });
     const { ok, status, statusText, headers } = response;
@@ -71,12 +68,10 @@ export const fetcherFile = async (url, token) => {
   }
 };
 
-export const getFetcherForLunatic = token => async (url, options) => {
+export const getFetcherForLunatic = () => async (url, options) => {
   const otherHeader = options?.headers || {};
   return fetch(url, {
     ...options,
-    headers: token
-      ? { ...otherHeader, Authorization: `Bearer ${token}` }
-      : otherHeader,
+    headers: otherHeader,
   });
 };

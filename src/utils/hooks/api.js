@@ -2,8 +2,7 @@ import { AppContext } from 'App';
 import { errorDictionary } from 'i18n';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { API } from 'utils/api';
-import { DEFAULT_DATA_URL, DEFAULT_METADATA_URL, OIDC } from 'utils/constants';
-import { useAuth } from './auth';
+import { DEFAULT_DATA_URL, DEFAULT_METADATA_URL } from 'utils/constants';
 import { getFetcherForLunatic } from 'utils/api/fetcher';
 
 const getErrorMessage = (response, type = 'q') => {
@@ -16,83 +15,66 @@ const getErrorMessage = (response, type = 'q') => {
 };
 
 export const useLunaticFetcher = () => {
-  const { authenticationType, oidcUser } = useAuth();
-
-  const lunaticFetcher = useCallback(
-    (url, options) => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return getFetcherForLunatic(token)(url, options);
-    },
-    [authenticationType, oidcUser]
-  );
+  const lunaticFetcher = (url, options) => {
+    return getFetcherForLunatic(url, options);
+  };
 
   return { lunaticFetcher };
 };
 
 export const useAPI = (surveyUnitID, questionnaireID) => {
-  const { authenticationType, oidcUser } = useAuth();
   const { apiUrl } = useContext(AppContext);
 
   const getRequiredNomenclatures = useCallback(() => {
-    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-    return API.getRequiredNomenclatures(apiUrl)(questionnaireID)(token);
-  }, [questionnaireID, apiUrl, authenticationType, oidcUser]);
+    return API.getRequiredNomenclatures(apiUrl)(questionnaireID);
+  }, [questionnaireID, apiUrl]);
 
   const getNomenclature = useCallback(() => {
-    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-    return API.getNomenclature(apiUrl)(questionnaireID)(token);
-  }, [questionnaireID, apiUrl, authenticationType, oidcUser]);
+    return API.getNomenclature(apiUrl)(questionnaireID);
+  }, [questionnaireID, apiUrl]);
 
   const getQuestionnaire = useCallback(() => {
-    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-    return API.getQuestionnaire(apiUrl)(questionnaireID)(token);
-  }, [questionnaireID, apiUrl, authenticationType, oidcUser]);
+    return API.getQuestionnaire(apiUrl)(questionnaireID);
+  }, [questionnaireID, apiUrl]);
 
   const getMetadata = useCallback(() => {
-    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-    return API.getMetadata(apiUrl)(questionnaireID)(token);
-  }, [questionnaireID, apiUrl, authenticationType, oidcUser]);
+    return API.getMetadata(apiUrl)(questionnaireID);
+  }, [questionnaireID, apiUrl]);
 
   const getSuData = useCallback(() => {
-    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-    return API.getSuData(apiUrl)(surveyUnitID)(token);
-  }, [surveyUnitID, apiUrl, authenticationType, oidcUser]);
+    return API.getSuData(apiUrl)(surveyUnitID);
+  }, [surveyUnitID, apiUrl]);
 
   const getPDF = useCallback(() => {
-    const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-    return API.getDepositProof(apiUrl)(surveyUnitID)(token);
-  }, [surveyUnitID, apiUrl, authenticationType, oidcUser]);
+    return API.getDepositProof(apiUrl)(surveyUnitID);
+  }, [surveyUnitID, apiUrl]);
 
   const putSuData = useCallback(
     body => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.putSuData(apiUrl)(surveyUnitID)(token)(body);
+      return API.putSuData(apiUrl)(surveyUnitID)(body);
     },
-    [surveyUnitID, apiUrl, authenticationType, oidcUser]
+    [surveyUnitID, apiUrl]
   );
 
   const putData = useCallback(
     body => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.putData(apiUrl)(surveyUnitID)(token)(body);
+      return API.putData(apiUrl)(surveyUnitID)(body);
     },
-    [surveyUnitID, apiUrl, authenticationType, oidcUser]
+    [surveyUnitID, apiUrl]
   );
 
   const putStateData = useCallback(
     body => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.putStateData(apiUrl)(surveyUnitID)(token)(body);
+      return API.putStateData(apiUrl)(surveyUnitID)(body);
     },
-    [surveyUnitID, apiUrl, authenticationType, oidcUser]
+    [surveyUnitID, apiUrl]
   );
 
   const postParadata = useCallback(
     body => {
-      const token = authenticationType === OIDC ? oidcUser?.access_token : null;
-      return API.postParadata(apiUrl)(token)(body);
+      return API.postParadata(apiUrl)(body);
     },
-    [apiUrl, authenticationType, oidcUser]
+    [apiUrl]
   );
 
   return {
@@ -143,6 +125,7 @@ export const useAPIRemoteData = (surveyUnitID, questionnaireID) => {
               setSuData(dR.data);
               setLoading(false);
             } else setErrorMessage(getErrorMessage(dR, 'd'));
+            debugger;
             setLoading(false);
           } else setErrorMessage(getErrorMessage(mR, 'm'));
           setLoading(false);
@@ -151,7 +134,6 @@ export const useAPIRemoteData = (surveyUnitID, questionnaireID) => {
       };
       load();
     }
-    // assume that we don't resend request to get data and questionnaire when token was refreshed
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [surveyUnitID, questionnaireID]);
 
@@ -179,20 +161,15 @@ export const useRemoteData = (questionnaireUrl, metadataUrl, dataUrl) => {
       setQuestionnaire(null);
       setNomenclatures(null);
       setSuData(null);
-      const fakeToken = null;
       const load = async () => {
-        const qR = await API.getRequest(questionnaireUrl)(fakeToken);
+        const qR = await API.getRequest(questionnaireUrl);
         if (!qR.error) {
           setQuestionnaire(qR.data);
           setNomenclatures([]); // fake nomenclatures for vizu
-          const mR = await API.getRequest(metadataUrl || DEFAULT_METADATA_URL)(
-            fakeToken
-          );
+          const mR = await API.getRequest(metadataUrl || DEFAULT_METADATA_URL);
           if (!mR.error) {
             setMetadata(mR.data);
-            const dR = await API.getRequest(dataUrl || DEFAULT_DATA_URL)(
-              fakeToken
-            );
+            const dR = await API.getRequest(dataUrl || DEFAULT_DATA_URL);
             if (!dR.error) {
               setSuData(dR.data);
               setLoading(false);
