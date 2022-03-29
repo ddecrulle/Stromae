@@ -1,7 +1,7 @@
-import React from 'react';
 import { Button } from 'components/designSystem';
+import React from 'react';
 import { buttonDictionary } from 'i18n';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core';
 import { VALIDATION_PAGE, WELCOME_PAGE } from 'utils/pagination';
 import { paradataHandler, SIMPLE_CLICK_EVENT } from 'utils/events';
 

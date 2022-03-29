@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import * as lunatic from '@inseefr/lunatic';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import Container from '@material-ui/core/Container';
+import { Card, Container, makeStyles } from '@material-ui/core';
 import { AppBar } from 'components/navigation/appBar';
 import { BurgerMenu } from 'components/navigation/burgerMenu';
 import { LoaderSimple } from 'components/shared/loader';

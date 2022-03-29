@@ -1,7 +1,6 @@
 import React from 'react';
 import * as lunatic from '@inseefr/lunatic';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
+import { Card, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: { padding: '10px', overflow: 'visible', marginBottom: '10px' },

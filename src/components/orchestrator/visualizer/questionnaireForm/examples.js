@@ -1,8 +1,6 @@
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
+import { FormControl, Select, InputLabel } from '@material-ui/core';
 import { visualizeDictionary } from 'i18n';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import React from 'react';
 import { QUESTIONNAIRE_EXAMPLES } from 'utils/constants';
 

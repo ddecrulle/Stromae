@@ -1,7 +1,6 @@
 import React from 'react';
 import Backdrop from '@material-ui/core/Backdrop';
-import { makeStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { CircularProgress, makeStyles } from '@material-ui/core';
 
 const Simple = () => {
   const useStyles = makeStyles(theme => ({

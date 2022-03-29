@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Orchestrator } from 'components/orchestrator/collector';
 import { useRemoteData, useVisuQuery } from 'utils/hooks';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-
+import { Box, makeStyles, Typography } from '@material-ui/core';
 import { LoaderSimple } from 'components/shared/loader';
 import QuestionnaireForm from './questionnaireForm';
 import { downloadDataAsJson } from 'utils/questionnaire';
